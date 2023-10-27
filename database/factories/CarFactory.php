@@ -2,34 +2,21 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Models\Car;
-
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CarFactory extends Factory
 {
-
     protected $model = Car::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
-
-        $this->faker->addProvider(new \Faker\Provider\Fakecar($this->faker));
-        $v = $this->faker->vehicleArray();
-
         return [
-            'model' => $v['model'],
-            'brand' => $v['brand'],
-            'color' => $this->faker->hexColor(),
-            'license' => $this->faker->unique()->bothify('#######'),
+            'make' => $this->faker->randomElement(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan']),
+            'model' => $this->faker->randomElement(['Corolla', 'Civic', 'F-150', 'Silverado', 'Altima']),
+            'year' => $this->faker->numberBetween(2000, 2023),
+            'color' => $this->faker->safeColorName,
         ];
     }
-    
-} 
+}
+ 

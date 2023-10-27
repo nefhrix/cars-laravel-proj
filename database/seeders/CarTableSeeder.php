@@ -8,11 +8,9 @@ use App\Models\Car;
 
 class CarTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Car::factory(1)->create();
+        \App\Models\Car::factory(20)->create();
     }
+
 }
