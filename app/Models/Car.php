@@ -14,5 +14,6 @@ class Car extends Model
         'model',
         'year',
         'color',
+        'car_image',
     ];
 }

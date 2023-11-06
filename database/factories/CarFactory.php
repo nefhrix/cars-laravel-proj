@@ -59,6 +59,7 @@ class CarFactory extends Factory
             ]),
             'year' => $this->faker->numberBetween(2009, 2023),
             'color' => $this->faker->safeColorName,
+            'car_image' => $this->faker->imageUrl(),
         ];
     }
 }
