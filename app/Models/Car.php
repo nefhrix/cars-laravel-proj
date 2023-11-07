@@ -17,3 +17,4 @@ class Car extends Model
         'car_image',
     ];
 }
+
