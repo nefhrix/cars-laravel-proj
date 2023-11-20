@@ -11,6 +11,8 @@ class CarTableSeeder extends Seeder
     public function run()
     {
         \App\Models\Car::factory(20)->create();
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
     }
 
 }
