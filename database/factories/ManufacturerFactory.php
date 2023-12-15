@@ -27,6 +27,7 @@ class ManufacturerFactory extends Factory
             ]),
             'phone_no' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
+            
         ];
     }
 }
