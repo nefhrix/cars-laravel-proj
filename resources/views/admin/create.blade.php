@@ -50,21 +50,11 @@
                         class="w-full mt-6"
                         field="car_image"
                         :value="@old('car_image')">></x-file-input>
-                        @props(['manufacturer', 'field' => '','selected' => null])
-
-                        @props(['manufacturer', 'field' => '','selected' => null])
-
-                        <select {{ $attributes->merge(['class' => 'form-select']) }}>
-                            @foreach ($manufacturers as $manufacturer)
-                                <option value="{{ $manufacturer->id }}" {{ $selected == $manufacturer->id ? 'selected' : '' }}>
-                                    {{ $manufacturer->name }}
-                                </option>
-                            @endforeach
-                        </select>
                         
-                        @error($field)
-                        <div class="text-red-600 text-sm">{{ $message }}</div>
-                        @enderror
+
+                        <div class="mt-6">
+                            <x-select-manufacturer name="manufacturer_id" :manufacturers="$manufacturers" :selected="old('manufacturer_id')"/>
+                        </div>
 
                     <x-primary-button class="mt-6">Save Car to Dealership</x-primary-button>
                 </form>

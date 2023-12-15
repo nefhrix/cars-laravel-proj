@@ -95,7 +95,11 @@ class CarController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.edit')->with('cars',$id);
+        $user = Auth::user();
+        $user->AuthorizeRoles('admin');
+
+        $manufacturers = Manufacturer::all();
+        return view('admin.edit')->with('cars',$id)->with('manufacturers',$manufacturers);
     }
 
     /**
@@ -104,6 +108,7 @@ class CarController extends Controller
     public function update(Request $request ,$cars)
     {
         $request->validate([
+            'manufacturer_id' => 'required',
             'make' => 'required',
             'model'=> 'required',
             'year'=> 'required',
@@ -121,6 +126,7 @@ class CarController extends Controller
         }
 
         $cars->update([
+            'manufacturer_id' => $request->manufacturer_id,
             'make'=> $request->make,
             'model'=> $request->model,
             'year'=> $request->year,

@@ -52,6 +52,10 @@
                         field="car_image"
                         :value="@old('car_image',$cars->car_image)">></x-file-input>
 
+                        <div class="mt-6">
+                            <x-select-manufacturer name="manufacturer_id" :manufacturers="$manufacturers" :selected="old('manufacturer_id')"/>
+                        </div>
+
                         <x-primary-button class="mt-6">Save Car to Dealership</x-primary-button>
                 </form>
                
