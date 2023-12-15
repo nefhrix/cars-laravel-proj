@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="my-6 p-6 bg-white border-b border-gray-200 shadow-sm sm:rounded-lg">
-                <form action="{{ route('admin.manufacturers.update', $manufacturer)}}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.manufacturers.update', $manufacturer)}}" method="POST" enctype="multipart/form-data">
                     @method('put')
                     @csrf
                     <x-text-input
@@ -38,9 +38,7 @@
 
                     
    
-                        <div class="mt-6">
-                            <x-select-manufacturer name="manufacturer_id" :manufacturers="$manufacturer" :selected="old('manufacturer_id')"/>
-                        </div>
+                
 
                         <x-primary-button class="mt-6">Save manufacturer to Dealership</x-primary-button>
                 </form>

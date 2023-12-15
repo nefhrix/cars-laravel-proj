@@ -35,6 +35,13 @@
                     <td class="bg-light"><strong>Manufacturer</strong></td>
                     <td>{{ $cars->manufacturer->name }}</td>
                 </tr>
+                @foreach ($cars->customers as $customer)
+                <tr>
+                    <td class="font-bold">Customer </td>
+                    <td> {{$customer->customer_fname}}</td>
+                    <td> {{$customer->customer_lname}}</td>
+                </tr>
+                @endforeach
                 <tr>
                     <td colspan="2">
                         @if ($cars->car_image)

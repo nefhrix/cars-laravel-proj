@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Manufacturer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-
+use App\Models\Car;
+use App\Models\Manufacturer;
 class ManufacturerController extends Controller
 {
     /**
@@ -16,10 +16,9 @@ class ManufacturerController extends Controller
     {
         $user = Auth::user();
         $user->authorizeRoles('admin');
+        $manufacturer = Manufacturer::all();
  
-        $manufacturers = Manufacturer::all();
- 
-        return view('admin.manufacturers.index')->with('manufacturers', $manufacturers);
+        return view('admin.manufacturers.index')->with('manufacturers', $manufacturer);
     }
  
     /**
@@ -30,51 +29,60 @@ class ManufacturerController extends Controller
         $user = Auth::user();
         $user->authorizeRoles('admin');
  
-        $manufacturers = Manufacturer::all();
-        return view('admin.manufacturers.create')->with('manufacturers',$manufacturers);
-    }
+        $manufacturer = Manufacturer::all();
  
+        return view('admin.manufacturers.create')->with('manufacturers', $manufacturer);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $user = Auth::user();
-    $user->authorizeRoles('admin');
- 
-    $request->validate([
-        'name' => 'required',
-        'address' => 'required',
-    
-    ]);
- 
-    // Store the manufacturer data
-    manufacturer::create([
-        'name' => $request->name,
-        'address' => $request->address,
- 
-    ]);
- 
-    return redirect()->route('admin.manufacturers.index');
-}
- 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Manufacturer $manufacturer)
     {
         $user = Auth::user();
         $user->authorizeRoles('admin');
+       
+        $request->validate([
+            'name' => 'required',
+            'phone_no' => 'required',
+            'address' => 'required',
+        ]);
+   
+        Manufacturer::create([
+            'name' => $request->name,
+            'phone_no' => $request->phone_no,
+            'address' => $request->address,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+   
+        // Use redirect() instead of to_route()
+        return redirect()->route('admin.manufacturers.index');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $user = Auth::user();
+        $user->authorizeRoles('Admin');
  
         if (!Auth::id()) {
-            return about(403);
+            return abort(403);
+        }
+ 
+        $manufacturer = Manufacturer::find($id);
+ 
+        if (!$manufacturer) {
+            return abort(404);
         }
  
         $cars = $manufacturer->cars;
  
-        return view ('admin.manufacturers.show', compact('manufacturer', 'cars'));
+        return view('admin.manufacturers.show', compact('manufacturer', 'cars'));
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -82,53 +90,49 @@ class ManufacturerController extends Controller
     {
         $user = Auth::user();
         $user->authorizeRoles('admin');
-    
-        $manufacturer = Manufacturer::find($id);
-    
-        if (!$manufacturer) {
-            return redirect()->route('admin.manufacturers.index')->with('error', 'Manufacturer not found');
-        }
-    
-        $manufacturers = Manufacturer::all(); // or however you retrieve your manufacturers
-    
-        return view('admin.manufacturers.edit', compact('manufacturer', 'manufacturers'));
-    }
-    
-    
-    
-    
  
+        $manufacturer = Manufacturer::find($id);
+ 
+        if (!$manufacturer) {
+            return abort(404);
+        }
+;
+ 
+        return view('admin.manufacturers.edit')->with('manufacturer',$id);
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
+    {
+        $user = Auth::user();
+        $user->authorizeRoles('admin');
         $request->validate([
             'name' => 'required',
-            'phone_no' => 'required',
             'address' => 'required',
+            'phone_no' => 'required'
         ]);
-    
-        $manufacturer = Manufacturer::findOrFail($id);
-    
+ 
+        $manufacturer = Manufacturer::find($id);
+ 
+        if (!$manufacturer) {
+            return abort(404);
+        }
+ 
         $manufacturer->update([
             'name' => $request->name,
-            'phone_no' => $request->phone_no,
             'address' => $request->address,
+            'phone_no' => $request->phone_no
         ]);
-    
-        return redirect()->route('admin.manufacturers.show', $manufacturer)->with('success', 'Manufacturer updated successfully');
-    }
-    
  
+        return redirect()->route('admin.manufacturers.show', $manufacturer->id)->with('success', 'manufacturer updated successfully');
+    }
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-    {
-        $manufacturer = manufacturer::findOrFail($id); // Fetch the manufacturer using the provided ID
-        $manufacturer->delete();
-    
-        return redirect()->route('admin.manufacturers.index')->with('success', 'manufacturer deleted successfully');
-    }
+
 }
