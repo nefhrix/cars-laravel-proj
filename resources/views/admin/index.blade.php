@@ -21,16 +21,18 @@
                     <th>Model</th>
                     <th>Year</th>
                     <th>Color</th>
+                    <th>Manufacturer</th>
                     <th>Image</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($cars as $car)
                 <tr>
-                    <td><a href="{{ route('cars.show', $car) }}">{{ $car->make }}</a></td>
-                    <td><a href="{{ route('cars.show', $car) }}">{{ $car->model }}</a></td>
+                    <td><a href="{{ route('admin.cars.show', $car) }}">{{ $car->make }}</a></td>
+                    <td><a href="{{ route('admin.cars.show', $car) }}">{{ $car->model }}</a></td>
                     <td>{{ $car->year }}</td>
                     <td>{{ $car->color }}</td>
+                    <td>{{ $car->manufacturer->name}}</td>
                     <td>
                         @if ($car->car_image)
                             <img src="{{ $car->car_image }}" width="100px" height="100px" alt="Car Image">

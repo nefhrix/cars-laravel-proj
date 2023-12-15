@@ -32,6 +32,10 @@
                     <td>{{ $cars->color }}</td>
                 </tr>
                 <tr>
+                    <td class="bg-light"><strong>Manufacturer</strong></td>
+                    <td>{{ $cars->manufacturer->name }}</td>
+                </tr>
+                <tr>
                     <td colspan="2">
                         @if ($cars->car_image)
                             <img src="{{ asset($cars->car_image) }}" class="img-fluid" alt="Car Image">
@@ -44,8 +48,8 @@
         </table>
         
         
-        <x-primary-button><a href="{{ route('cars.edit', $cars)}}">edit</a> </x-primary-button>
-        <form action-"{{ route('cars.destroy', $cars)}}" method="post">
+        <x-primary-button><a href="{{ route('admin.cars.edit', $cars)}}">edit</a> </x-primary-button>
+        <form action-"{{ route('admin.cars.destroy', $cars)}}" method="post">
             @method('delete')
             @csrf
             <x-primary-button onclick="return confirm('you sure u wanna delete')">Delete </x-primary-button>

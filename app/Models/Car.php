@@ -15,6 +15,12 @@ class Car extends Model
         'year',
         'color',
         'car_image',
+        'manufacturer_id',
     ];
+
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class);
+    }
 }
 

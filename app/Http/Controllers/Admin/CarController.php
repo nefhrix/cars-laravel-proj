@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Car;
+use App\Models\Manufacturer;
 class CarController extends Controller
 {
     /**
@@ -11,8 +14,11 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = Car::all();
-        return view('cars.index', compact('cars'));
+        $user = Auth::user();
+        $user->AuthorizeRoles('admin');
+
+        $cars = Car::with('manufacturer')->get();
+        return view('admin.index')->with('cars',$cars);
     }
 
     /**
@@ -20,7 +26,11 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('cars.create');
+        $user = Auth::user();
+        $user->AuthorizeRoles('admin');
+
+        $manufacturers = Manufacturer::all();
+        return view('admin.create')->with('manufacturers',$manufacturers);
     }
 
     /**
@@ -28,23 +38,31 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
+
+        $user = Auth::user();
+        $user->AuthorizeRoles('admin');
+
+        try {
         $request->validate([
+            
             'make' => 'required',
             'model'=> 'required',
             'year'=> 'required',
             'color'=> 'required',
             'car_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'manufacturer_id' => 'required',
         ]);
 
         if ($request->hasFile('car_image')) {
             $image = $request->file('car_image');
             $imageName = time() . '.' . $image->extension();
  
-            $image->storeAs('public/cars', $imageName);
-            $car_image_name = 'storage/cars/' . $imageName;
+            $image->storeAs('public/', $imageName);
+            $car_image_name = 'storage/' . $imageName;
         }
 
         Car::create([
+            'manufacturer_id' => $request->manufacturer_id,
             'make'=> $request->make,
             'model'=> $request->model,
             'year'=> $request->year,
@@ -53,7 +71,11 @@ class CarController extends Controller
             'created at' => now(),
             'updated at' => now(),
         ]);
-        return to_route('cars.index');
+
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }
+        return to_route('admin.cars.index');
 
     }
 
@@ -62,8 +84,10 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        $id = Car::find($id);
-        return view('cars.show')->with('cars',$id);
+        $user = Auth::user();
+        $user->AuthorizeRoles('admin');
+        $car = Car::find($id);
+        return view('admin.show')->with('cars',$car);
     }
 
     /**
@@ -71,7 +95,7 @@ class CarController extends Controller
      */
     public function edit($id)
     {
-        return view('cars.edit')->with('cars',$id);
+        return view('admin.edit')->with('cars',$id);
     }
 
     /**
@@ -92,8 +116,8 @@ class CarController extends Controller
             $image = $request->file('car_image');
             $imageName = time() . '.' . $image->extension();
  
-            $image->storeAs('public/cars', $imageName);
-            $car_image_name = 'storage/cars/' . $imageName;
+            $image->storeAs('public/', $imageName);
+            $car_image_name = 'storage/' . $imageName;
         }
 
         $cars->update([
@@ -103,7 +127,7 @@ class CarController extends Controller
             'color'=> $request->color,
             'car_image' => $car_image_name
         ]);
-        return to_route('cars.show', $cars);
+        return to_route('admin.cars.show', $cars);
     }
     
 
@@ -114,6 +138,12 @@ class CarController extends Controller
     {
         $cars = Car::findOrFail($id);
         $cars->delete();
-        return to_route('cars.index');
+        return to_route('admin.cars.index');
+    }
+
+
+    public function manufacturer()
+    {
+        return $this->belongsTo(Car::class);
     }
 }

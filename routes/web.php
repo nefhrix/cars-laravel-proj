@@ -1,8 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\CarController;
+use App\Http\Controllers\Admin\CarController as AdminCarController;
+use App\Http\Controllers\User\CarController as UserCarController;
 use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::resource('/cars', CarController::class);
+
 
 
 Route::get('/', function () {
@@ -32,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+Route::resource('/admin/cars', AdminCarController::class)->middleware(['auth'])->names('admin.cars');
+Route::resource('/user/cars', UserCarController::class)->middleware(['auth'])->names('user.cars')->only(['index', 'show']);
 require __DIR__.'/auth.php';
 
 
