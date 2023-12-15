@@ -18,11 +18,11 @@ class CarController extends Controller
         $user->AuthorizeRoles('admin');
 
         $cars = Car::with('manufacturer')->get();
-        return view('admin.index')->with('cars',$cars);
+        return view('admin.cars.index')->with('cars',$cars);
     }
 
     /**
-     * Show the form for creating a new resource. added finding all manufacturers
+     * Show the form for creating a new resource. added finding all
      */
     public function create()
     {
@@ -30,7 +30,7 @@ class CarController extends Controller
         $user->AuthorizeRoles('admin');
 
         $manufacturers = Manufacturer::all();
-        return view('admin.create')->with('manufacturers',$manufacturers);
+        return view('admin.cars.create')->with('manufacturers',$manufacturers);
     }
 
     /**
@@ -87,7 +87,7 @@ class CarController extends Controller
         $user = Auth::user();
         $user->AuthorizeRoles('admin');
         $car = Car::find($id);
-        return view('admin.show')->with('cars',$car);
+        return view('admin.cars.show')->with('cars',$car);
     }
 
     /**
@@ -99,7 +99,7 @@ class CarController extends Controller
         $user->AuthorizeRoles('admin');
 
         $manufacturers = Manufacturer::all();
-        return view('admin.edit')->with('cars',$id)->with('manufacturers',$manufacturers);
+        return view('admin.cars.edit')->with('cars',$id)->with('manufacturers',$manufacturers);
     }
 
     /**

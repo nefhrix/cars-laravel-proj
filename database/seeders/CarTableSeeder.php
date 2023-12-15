@@ -14,6 +14,7 @@ class CarTableSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ManufacturerSeeder::class);
+        $this->call(CustomerSeeder::class);
     }
 
 }

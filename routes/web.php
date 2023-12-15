@@ -3,6 +3,8 @@
 
 use App\Http\Controllers\Admin\CarController as AdminCarController;
 use App\Http\Controllers\User\CarController as UserCarController;
+use App\Http\Controllers\Admin\ManufacturerController as AdminManufacturerController;
+use App\Http\Controllers\User\ManufacturerController as UserManufacturerController;
 use App\Http\Controllers\ProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,8 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('/admin/cars', AdminCarController::class)->middleware(['auth'])->names('admin.cars');
 Route::resource('/user/cars', UserCarController::class)->middleware(['auth'])->names('user.cars')->only(['index', 'show']);
+Route::resource('/admin/manufacturers', AdminManufacturerController::class)->middleware(['auth'])->names('admin.manufacturers');
+Route::resource('/user/manufacturers', UserManufacturerController::class)->middleware(['auth'])->names('user.manufacturers')->only(['index', 'show']);
 require __DIR__.'/auth.php';
 
 
